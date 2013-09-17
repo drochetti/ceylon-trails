@@ -58,9 +58,9 @@ shared class HttpdEngine(
 
             acceptMethod = route.methods.map(
                 (HttpMethod m) => parseMethod(m.string));
-            
+
             path = UriPatternMatcher(route.uriPattern);
-            
+
             void service(Request request, Response response, void complete()) {
                 handleRoute(RequestContext {
                     mappedRoute = route;

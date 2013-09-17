@@ -1,8 +1,21 @@
+import ceylon.collection {
+    LinkedList
+}
 import ceylon.language.model {
     type
 }
 import ceylon.language.model.declaration {
     Package
+}
+import ceylon.trails.core {
+    RequestMiddleware,
+    ApplicationMiddleware,
+    PoweredByMiddleware,
+    HttpMethodOverrideMiddleware
+}
+import ceylon.trails.core.render {
+    ContentRendererMiddleware,
+    HtmlRenderer
 }
 import ceylon.trails.engine {
     WebEngine
@@ -14,9 +27,6 @@ import ceylon.trails.routing {
     RouteMapper,
     NamingConventions
 }
-import ceylon.trails.core.render { ContentRendererMiddleware, HtmlRenderer }
-import ceylon.trails.core { RequestMiddleware, ApplicationMiddleware, PoweredByMiddleware, HttpMethodOverrideMiddleware }
-import ceylon.collection { LinkedList }
 
 {RequestMiddleware+} defaultRequestMiddlewares = {
     PoweredByMiddleware(),

@@ -2,7 +2,6 @@ import ceylon.collection {
     LinkedList
 }
 import ceylon.language.model {
-    type,
     annotations,
     Class
 }
@@ -18,23 +17,24 @@ import ceylon.trails.uri {
     UriPattern
 }
 
-shared class RouteMapper(namingConventions = NamingConventions()) {
+shared class RouteMapper() {
     
-    shared default NamingConventions namingConventions;
-    
-    shared {MappedRoute*} map() {
+    shared {MappedRoute*} map(
+            NamingConventions namingConventions,
+            Package* controllerPackages) {
 
         print("Mapping application routes...");
-        value pkgs = findControllersPackage();
+        value pkgs = controllerPackages;
         
         value controllers = LinkedList<ClassDeclaration>();
         for (pkg in pkgs) {
-            controllers.addAll(pkg.members<ClassDeclaration>().filter(filterControllers));
+            controllers.addAll(pkg.members<ClassDeclaration>().filter(
+                (ClassDeclaration e) => filterControllers(namingConventions, e)));
         }
-        
+
         value routes = LinkedList<MappedRoute>();
         for (controller in controllers) {
-            print("Looking route trails on ``controller.qualifiedName``...");
+            print("Looking for route trails on ``controller.qualifiedName``...");
             value pkgUri = namingConventions.uriFromPackage(controller.containingPackage);
             value controllerUri = namingConventions.uriFromControllerClass(controller);
 
@@ -64,17 +64,12 @@ shared class RouteMapper(namingConventions = NamingConventions()) {
             }
         }
         return routes.sort(
-            (MappedRoute one, MappedRoute other) => one.compare(other));
+            (MappedRoute one, MappedRoute other) => one.compare(other)).reversed;
     }
 
-    shared default Boolean filterControllers(
-        ClassDeclaration candidate) => candidate.name.endsWith(namingConventions.controllerSuffix);
-
-    shared default {Package*} findControllersPackage() {
-        value appModule = type(this).declaration.containingModule;
-        return appModule.members.filter(
-            (Package elem) => elem.name.contains(namingConventions.controllerPackage));
-    }
+    shared default Boolean filterControllers(NamingConventions namingConventions,
+        ClassDeclaration candidate) =>
+            candidate.name.endsWith(namingConventions.controllerSuffix);
 
     void logRoute(MappedRoute mappedRoute) {
         value handlerRef = mappedRoute.handlerRef;

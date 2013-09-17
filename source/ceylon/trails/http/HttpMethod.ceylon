@@ -24,4 +24,6 @@ shared abstract class HttpMethod()
 
     shared String name => type(this).declaration.name;
 
+    string => name.uppercased;
+
 }

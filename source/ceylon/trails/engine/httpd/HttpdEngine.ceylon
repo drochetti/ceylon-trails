@@ -1,14 +1,21 @@
+import ceylon.net.http {
+    parseMethod
+}
 import ceylon.net.http.server {
     Server,
     createServer,
-    AsynchronousEndpoint,
     Request,
     Response,
     Matcher,
-    Options
+    Options,
+    AsynchronousEndpoint
 }
 import ceylon.trails.engine {
-    WebEngine, RequestContext
+    WebEngine,
+    RequestContext
+}
+import ceylon.trails.http {
+    HttpMethod
 }
 import ceylon.trails.routing {
     MappedRoute
@@ -17,17 +24,10 @@ import ceylon.trails.uri {
     UriPattern
 }
 
+
 class UriPatternMatcher(UriPattern pattern) extends Matcher() {
 
-    //shared actual Boolean matches(String path) => pattern.matches(path);
-    shared actual Boolean matches(String path) {
-        print("path -> ``path``");
-        print("pattern -> ``pattern.pattern``");
-        print("pattern matcher -> ``pattern.patternMatcher``");
-        print("pattern test -> ``pattern.matches(path)``");
-        print("-----------------------------");
-        return pattern.matches(path);
-    }
+    shared actual Boolean matches(String path) => pattern.matches(path);
     
     shared actual String relativePath(String requestPath) => requestPath;
 
@@ -37,9 +37,9 @@ shared class HttpdEngine(
             Integer port = 8080,
             String host = "localhost",
             Options serverOptions = Options())
-        satisfies WebEngine {
-    
-    Server server = createServer({});
+        extends WebEngine() {
+
+    Server server = createServer(empty);
 
     shared actual String name = "undertow";
     
@@ -48,24 +48,28 @@ shared class HttpdEngine(
     shared actual void stop() => server.stop();
 
     shared actual void bindRoutes(MappedRoute* routes) {
-        for (mappedRoute in routes) {
-            server.addEndpoint(AsynchronousEndpoint {
-                path = UriPatternMatcher(mappedRoute.uriPattern);
-                void service(Request request, Response response, void complete()) {
-                    print("request handled!");
-                    print(mappedRoute.uriPattern.pattern);
-                    print(mappedRoute.handlerRef);
-                    print("---------------------");
-                    handleRoute(RequestContext {
-                        mappedRoute = mappedRoute;
-                        request = request;
-                        response = response;
-                    });
-                    complete();
-                }
-                acceptMethod = {};
-            });
+        for (route in routes) {
+            bindRoute(route);
         }
+    }
+
+    shared void bindRoute(MappedRoute route) {
+        server.addEndpoint(AsynchronousEndpoint {
+
+            acceptMethod = route.methods.map(
+                (HttpMethod m) => parseMethod(m.string));
+            
+            path = UriPatternMatcher(route.uriPattern);
+            
+            void service(Request request, Response response, void complete()) {
+                handleRoute(RequestContext {
+                    mappedRoute = route;
+                    request = request;
+                    response = response;
+                });
+                complete();
+            }
+        });
     }
 
 }

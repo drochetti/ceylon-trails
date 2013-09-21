@@ -1,4 +1,4 @@
-import ceylon.language.model.declaration {
+import ceylon.language.meta.declaration {
     FunctionDeclaration
 }
 import ceylon.trails.http {

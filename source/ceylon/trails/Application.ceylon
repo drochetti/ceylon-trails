@@ -1,10 +1,10 @@
 import ceylon.collection {
     LinkedList
 }
-import ceylon.language.model {
+import ceylon.language.meta {
     type
 }
-import ceylon.language.model.declaration {
+import ceylon.language.meta.declaration {
     Package
 }
 import ceylon.trails.core {

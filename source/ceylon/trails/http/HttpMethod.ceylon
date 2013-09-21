@@ -1,4 +1,4 @@
-import ceylon.language.model { type }
+import ceylon.language.meta { type }
 
 shared object connect extends HttpMethod() {}
 

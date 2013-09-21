@@ -1,7 +1,7 @@
 import ceylon.collection {
     LinkedList
 }
-import ceylon.language.model {
+import ceylon.language.meta {
     type
 }
 import ceylon.net.http.server {
@@ -33,7 +33,7 @@ shared abstract class WebEngine() {
         value controller = chosenRoute.controller;
         value handlerRef = chosenRoute.handlerRef;
 
-        value handler = handlerRef.memberApply<Anything, Object?, [Request, Response]>(
+        value handler = handlerRef.memberApply<Object, Object?, [Request, Response]>(
             type(controller))(controller);
         // TODO how to handle any method? any number/kind of arguments, including none
         //value handler = handlerRef.memberApply<Anything, Object?, Anything[]|[]>(
@@ -61,7 +61,14 @@ shared abstract class WebEngine() {
         }
         
     }
-    
+
+    //void bindParameters(FunctionDeclaration handlerRef) {
+    //    for (param in handlerRef.parameterDeclarations) {
+    //        if (is ValueDeclaration param) {
+    //        }
+    //    }
+    //}
+
     shared void bindRequestMiddlewares(RequestMiddleware* m) {
         middlewares.addAll(m);
     }

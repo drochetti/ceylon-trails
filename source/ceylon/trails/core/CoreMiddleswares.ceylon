@@ -1,4 +1,4 @@
-import ceylon.language.model {
+import ceylon.language.meta {
     type
 }
 import ceylon.net.http {

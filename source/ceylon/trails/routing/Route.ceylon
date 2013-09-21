@@ -1,7 +1,4 @@
-import ceylon.language.model {
-    OptionalAnnotation
-}
-import ceylon.language.model.declaration {
+import ceylon.language.meta.declaration {
     Package,
     ClassOrInterfaceDeclaration,
     FunctionDeclaration
@@ -20,14 +17,13 @@ shared alias RoutableElements =>
 shared final annotation class Route(
             path, through)
         satisfies OptionalAnnotation<Route, RoutableElements> {
-    
+
     shared String path;
-    
+
     shared {HttpMethod*} through;
-    
+
 }
 
-""
 shared annotation Route route(
         String path = "",
         {HttpMethod*} through = {get, head}) => Route(path, through);

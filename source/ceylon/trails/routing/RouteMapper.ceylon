@@ -1,14 +1,16 @@
 import ceylon.collection {
     LinkedList
 }
-import ceylon.language.model {
-    annotations,
-    Class
+import ceylon.language.meta {
+    annotations
 }
-import ceylon.language.model.declaration {
-    FunctionDeclaration,
+import ceylon.language.meta.declaration {
     Package,
-    ClassDeclaration
+    ClassDeclaration,
+    FunctionDeclaration
+}
+import ceylon.language.meta.model {
+    Class
 }
 import ceylon.trails.http {
     HttpMethod
@@ -39,7 +41,7 @@ shared class RouteMapper() {
             value controllerUri = namingConventions.uriFromControllerClass(controller);
 
             // TODO simple no-arg constructor invoking
-            value controllerType = controller.apply();
+            value controllerType = controller.apply<>();
             assert(is Class<Object, []> controllerType);
             value controllerInstance = controllerType();
 

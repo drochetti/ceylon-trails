@@ -5,8 +5,10 @@ import ceylon.html.layout {
     Layout
 }
 
-shared interface View {
+shared interface View<Kind> {
 
-    shared formal Html|Layout render();
+    shared formal Kind render();
 
 }
+
+shared interface HtmlView satisfies View<Html|Layout> {}

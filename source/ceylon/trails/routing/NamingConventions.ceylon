@@ -1,9 +1,9 @@
-import ceylon.language.model {
+import ceylon.language.meta {
     annotations
 }
-import ceylon.language.model.declaration {
-    ClassDeclaration,
+import ceylon.language.meta.declaration {
     Package,
+    ClassDeclaration,
     FunctionDeclaration
 }
 import ceylon.trails.http {

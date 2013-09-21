@@ -7,17 +7,19 @@ import ceylon.html.layout {
 import ceylon.html.serializer {
     HtmlSerializer
 }
+import ceylon.net.http {
+    Header
+}
 import ceylon.net.http.server {
     Response
 }
 import ceylon.trails.core {
-    View
+    HtmlView
 }
 import ceylon.trails.http {
     MimeType,
     textHtml
 }
-import ceylon.net.http { Header }
 
 shared class HtmlRenderer() satisfies ContentRenderer {
 
@@ -39,7 +41,7 @@ shared class HtmlRenderer() satisfies ContentRenderer {
         variable Html|Layout? html = null;
         if (is Html|Layout result) {
             html = result;
-        } else if (is View result) {
+        } else if (is HtmlView result) {
             html = result.render();
         }
 
